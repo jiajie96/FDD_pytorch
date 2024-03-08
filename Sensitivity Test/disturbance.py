@@ -1,4 +1,3 @@
-import torch
 import numpy as np
 import cv2
 import os
@@ -11,22 +10,14 @@ import random
 import skimage
 import tensorflow as tf
 
-#model_c =tf.keras.applications.inception_v3.InceptionV3(weights= '/root/FD_score/inception_v3.h5',include_top=False, pooling='avg',input_shape=(299, 299, 3))
-#print("Inception model uploaded")
-
 
 import torch
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 import matplotlib.pyplot as plt
-
-import matplotlib.pyplot as plt
 from tqdm import tqdm
-import cv2
 
 
-import numpy as np
-import os
 
 def apply_salt_pepper_noise(original_data):
   
@@ -55,7 +46,7 @@ def apply_salt_pepper_noise(original_data):
             '''
             disturbed_images_per_level.append(img_copy) # or (img_copy).astype(numpy.uint8)
             if j == 0 or j == 4 or j == 8 or j == 12:
-                Image.fromarray((img_copy).astype(np.uint8)).save(f'/root/Denoising_AE/Sensitivity_Test/Final_Experiment_FFHQ/samples/sp_noisy_image{j}.png')
+                Image.fromarray((img_copy).astype(np.uint8)).save(f'sp_noisy_image{j}.png')
         disturbed_images.append(disturbed_images_per_level)
         
     return disturbed_images
@@ -80,7 +71,7 @@ def apply_gaussian_noise(original_data, save = True):
             
             if save == True:
                 if j == 0 or j == 4 or j == 8 or j == 12:
-                    Image.fromarray((noisy).astype(np.uint8)).save(f'/root/Denoising_AE/Sensitivity_Test/Final_Experiment_FFHQ/samples/gaussian_noisy_image{j}.png')
+                    Image.fromarray((noisy).astype(np.uint8)).save(f'gaussian_noisy_image{j}.png')
         disturbed_images.append(disturbed_images_per_level)
         
     return disturbed_images
@@ -102,7 +93,7 @@ def apply_swirl(original_data):
             img_s = swirl(img_copy, rotation=0, strength=sign*w, radius=120, center=center)
             disturbed_images_per_level.append(img_s*255) # or (img_copy).astype(numpy.uint8)
             if j == 0 or j == 4 or j == 8 or j == 12:
-                Image.fromarray((img_s*255).astype(np.uint8)).save(f'/root/Denoising_AE/Sensitivity_Test/Final_Experiment_FFHQ/samples/swirled_image{j}.png')
+                Image.fromarray((img_s*255).astype(np.uint8)).save(f'swirled_image{j}.png')
                 
         disturbed_images.append(disturbed_images_per_level)
                
@@ -189,7 +180,7 @@ def apply_swap(original_data, save = True):
             disturbed_images_per_level.append(new_image) # or (img_copy).astype(numpy.uint8)
             if save == True:
                 if jj == 0 or jj == 4 or jj == 8 or jj == 12:
-                    Image.fromarray((new_image).astype(np.uint8)).save(f'/root/Denoising_AE/Sensitivity_Test/Final_Experiment_FFHQ/samples/swap_L1_image{jj}.png')
+                    Image.fromarray((new_image).astype(np.uint8)).save(f'swap_L1_image{jj}.png')
         disturbed_images.append(disturbed_images_per_level)
         
     return disturbed_images
@@ -201,13 +192,13 @@ def apply_swap_GN(original_data):
     swapped =  apply_swap(original_data, save = False)
     disturbed_images = apply_gaussian_noise(np.asarray(swapped), save = False)
     
-    Image.fromarray((disturbed_images[0][0][0]).astype(np.uint8)).save(f'/root/Denoising_AE/Sensitivity_Test/Final_Experiment_FFHQ/samples/swap_GN_image{0}.png')
+    Image.fromarray((disturbed_images[0][0][0]).astype(np.uint8)).save(f'swap_GN_image{0}.png')
     
-    Image.fromarray((disturbed_images[0][0][4]).astype(np.uint8)).save(f'/root/Denoising_AE/Sensitivity_Test/Final_Experiment_FFHQ/samples/swap_GN_image{4}.png')
+    Image.fromarray((disturbed_images[0][0][4]).astype(np.uint8)).save(f'swap_GN_image{4}.png')
     
-    Image.fromarray((disturbed_images[0][0][8]).astype(np.uint8)).save(f'/root/Denoising_AE/Sensitivity_Test/Final_Experiment_FFHQ/samples/swap_GN_image{8}.png')
+    Image.fromarray((disturbed_images[0][0][8]).astype(np.uint8)).save(f'swap_GN_image{8}.png')
     
-    Image.fromarray((disturbed_images[0][0][12]).astype(np.uint8)).save(f'/root/Denoising_AE/Sensitivity_Test/Final_Experiment_FFHQ/samples/swap_GN_image{12}.png')
+    Image.fromarray((disturbed_images[0][0][12]).astype(np.uint8)).save(f'swap_GN_image{12}.png')
     return disturbed_images[0]
 
 
@@ -302,7 +293,7 @@ def apply_mask(original_data, save = True):
             
             if save == True:
                 if jj == 0 or jj == 4 or jj == 8 or jj == 12:
-                    Image.fromarray((new_image).astype(np.uint8)).save(f'/root/Denoising_AE/Sensitivity_Test/Final_Experiment_FFHQ/samples/masked_L1_image{jj}.png')
+                    Image.fromarray((new_image).astype(np.uint8)).save(f'masked_L1_image{jj}.png')
         disturbed_images.append(disturbed_images_per_level)
         
     return disturbed_images

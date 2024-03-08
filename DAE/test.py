@@ -52,7 +52,7 @@ class CustomDataset(Dataset):
 
 
 
-test_image_directory = '/root/Denoising_AE/Sensitivity_Test/bikess/i'
+test_image_directory = '/'
 test_image_paths = glob.glob(os.path.join(test_image_directory, '*.png'))
 print(len(test_image_paths))
 test_dataset = CustomDataset(image_paths=test_image_paths, transform=transform)
@@ -65,7 +65,7 @@ print('validation dataloader created !!')
 
 
 
-checkpoint_path = '/root/Denoising_AE/code_shared_ImageNet/ckpt/exp2/checkpoint_epoch_76.pth'
+checkpoint_path = 'checkpoint_epoch_76.pth'
 
 config= AutoEncoderConfig()
 config.input_dim = 299

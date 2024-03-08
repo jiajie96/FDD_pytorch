@@ -28,33 +28,20 @@ import random
 import skimage
 import tensorflow as tf
 
-import torch
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 import matplotlib.pyplot as plt
 
-import matplotlib.pyplot as plt
 from tqdm import tqdm
 import cv2
 
 
-import numpy as np
-import os
-
-from modeling_autoencoder_conv import AutoEncoder, AutoEncoderConfig
-from modeling_autoencoder_ls2048 import ImagenetAutoEncoder, ImagenetAutoEncoderConfig
-
-from model_attention_32 import Att32AutoEncoder, Att32AutoEncoderConfig
-from model_attention_16 import Att16AutoEncoder, Att16AutoEncoderConfig
-
-#from autoencoder_mnist import AutoEncoder, AutoEncoderConfig
-
+from DAE.modeling_autoencoder_conv import AutoEncoder, AutoEncoderConfig
+from DAE.modeling_autoencoder_ls2048 import ImagenetAutoEncoder, ImagenetAutoEncoderConfig
 
 from load_encoder import load_encoder
 
-
-
-        
+       
 
 def create_disturbed_groups(image_paths, group_size):
     
@@ -79,41 +66,41 @@ def create_disturbed_groups(image_paths, group_size):
             original_images.append(original_image)
 
         original_images = np.asarray(original_images) 
-        np.save(f'/root/Denoising_AE/Sensitivity_Test/Final_Experiment_FFHQ/dataset/original_group_{count}',original_images)
+        np.save(f'/original_group_{count}',original_images)
         all_original_images.append(original_images)
         
         
         # apply SP Noise
         SP_disturbed_images = np.asarray(apply_salt_pepper_noise(original_images))
-        np.save(f'/root/Denoising_AE/Sensitivity_Test/Final_Experiment_FFHQ/dataset/saltPepper_group_{count}',SP_disturbed_images)
+        np.save(f'saltPepper_group_{count}',SP_disturbed_images)
         all_disturbed_images_one_group.append(SP_disturbed_images)
         
         # apply Gaussian Noise
         GN_disturbed_images = np.asarray(apply_gaussian_noise(original_images))
-        np.save(f'/root/Denoising_AE/Sensitivity_Test/Final_Experiment_FFHQ/dataset/gaussian_noise_group_{count}',GN_disturbed_images)
+        np.save(f'gaussian_noise_group_{count}',GN_disturbed_images)
         all_disturbed_images_one_group.append(GN_disturbed_images)
         # apply swirl 
         
         Swirl_disturbed_images = np.asarray(apply_swirl(original_images))
-        np.save(f'/root/Denoising_AE/Sensitivity_Test/Final_Experiment_FFHQ/dataset/swirl_group_{count}',Swirl_disturbed_images)
+        np.save(f'swirl_group_{count}',Swirl_disturbed_images)
         all_disturbed_images_one_group.append(Swirl_disturbed_images)
         
         # apply swap
         Swap_disturbed_images = np.asarray(apply_swap(original_images))
-        np.save(f'/root/Denoising_AE/Sensitivity_Test/Final_Experiment_FFHQ/dataset/swap_group_{count}',Swap_disturbed_images)
+        np.save(f'swap_group_{count}',Swap_disturbed_images)
         all_disturbed_images_one_group.append(Swap_disturbed_images)
         
         
         # apply mask
         masked_disturbed_images = np.asarray(apply_mask(original_images))
         print(masked_disturbed_images.shape)
-        np.save(f'/root/Denoising_AE/Sensitivity_Test/Final_Experiment_FFHQ/dataset/mask_group_{count}',masked_disturbed_images)
+        np.save(f'mask_group_{count}',masked_disturbed_images)
         all_disturbed_images_one_group.append(masked_disturbed_images)
            
         
         #apply Swap + GN       
         Swap_GN_disturbed_images = np.asarray(apply_swap_GN(original_images))
-        np.save(f'/root/Denoising_AE/Sensitivity_Test/Final_Experiment_FFHQ/dataset/swap_GN_group_{count}',Swap_GN_disturbed_images)
+        np.save(f'swap_GN_group_{count}',Swap_GN_disturbed_images)
         all_disturbed_images_one_group.append(Swap_GN_disturbed_images)
         
         
@@ -142,7 +129,7 @@ def main():
     
 
 
-    image_directory = '/root/FD_score/ffhq256_1k'
+    image_directory = 'ffhq256_1k'
     image_paths = glob.glob(os.path.join(image_directory, '*.png'))
     print(len(image_paths))
     np.random.shuffle(image_paths)

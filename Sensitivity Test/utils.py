@@ -14,20 +14,12 @@ from torchvision import datasets, transforms
 from torch.utils.data import Dataset
 
 
-import torch
 from torch.utils.data import DataLoader
-from torchvision import datasets, transforms
-import matplotlib.pyplot as plt
-
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 import cv2
 
-
-import numpy as np
-import os
 import gc
-import numpy as np
 from gtda.homology import VietorisRipsPersistence
 from gtda.plotting import plot_diagram
 

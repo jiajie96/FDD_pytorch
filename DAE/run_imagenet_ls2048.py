@@ -123,7 +123,7 @@ class CustomDataset(Dataset):
         return image
 
 # 1- LOAD THE DATA
-image_directory = '/root/Denoising_AE/autoencoder/imagenet/train'
+image_directory = 'imagenet/train'
 image_paths = glob.glob(os.path.join(image_directory, '*.JPEG'))
 print(len(image_paths))   # start first with 10k images, trial
 train_dataset = CustomDataset(image_paths=image_paths, transform=transform)
@@ -132,7 +132,7 @@ train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 print('train dataloader created !!')
 
 
-val_image_directory = '/root/Denoising_AE/autoencoder/imagenet/val'
+val_image_directory = 'imagenet/val'
 val_image_paths = glob.glob(os.path.join(val_image_directory, '*.JPEG')) # 5k images 
 print(len(val_image_paths))
 val_dataset = CustomDataset(image_paths=val_image_paths, transform=transform)
@@ -158,7 +158,7 @@ print(device)
 
 model.to(device)
 
-log_file_path = '/root/Denoising_AE/code_shared_ImageNet/output_log.txt'
+log_file_path = 'output_log.txt'
 
 # 3- SET LOSS AND OPTIMIZER
 criterion = nn.MSELoss()
@@ -180,7 +180,7 @@ best_loss = 1000
 resume_training = True
 
 # Checkpoint path
-checkpoint_path = '/root/Denoising_AE/code_shared_ImageNet/ckpt/exp2/checkpoint_epoch_271.pth'
+checkpoint_path = 'checkpoint_epoch_271.pth'
 
 if resume_training:
     start_epoch = load_checkpoint(checkpoint_path, model, optimizer)
@@ -250,13 +250,13 @@ for epoch in range(start_epoch, num_epochs):
             'epoch:' : epoch,
             'loss:' : epoch_loss,
         }
-        torch.save(checkpoint, f'/root/Denoising_AE/code_shared_ImageNet/ckpt/exp_2_increaseNoise/checkpoint_epoch_{epoch+1}.pth')
+        torch.save(checkpoint, f'/checkpoint_epoch_{epoch+1}.pth')
         print(f"Checkpoint saved at epoch {epoch + 1}")
     # Save latent space every n epochs
     #if (epoch + 1) % save_interval == 0:
      #   save_latent_space(train_loader, model, epoch + 1, device)
         
 # Save the final model
-torch.save(best_model_wts, '/root/Denoising_AE/code_shared_ImageNet/results/DAE_exp_2_increaseNoise.pth')
-np.save('/root/Denoising_AE/code_shared_ImageNet/results/train4_exp_2_increaseNoise.npy',train_Losses)
-np.save('/root/Denoising_AE/code_shared_ImageNet/results/val4_exp_2_increaseNoise.npy',val_Losses)
+torch.save(best_model_wts, 'DAE_exp_2_increaseNoise.pth')
+np.save('train4_exp_2_increaseNoise.npy',train_Losses)
+np.save('val4_exp_2_increaseNoise.npy',val_Losses)
