@@ -1,19 +1,10 @@
 '''
 a python script to divide the totality of 3000 bike images , split them into 10 groups of 300, for each group then apply the same distrubance function predefined liked swirl and compare it to its original state using a distance metric, at the ened we ll get for each distrubance function a set of 10 score values , from which we track the minimun, the maxinum and the mean.
-
+Similarly , applied to CHAIR and FFHQ dataset
 '''
 
 from utils import calculate_FD,  calculate_fid, calculate_td, calculate_fdd, calculate_fd_TopoAE, extract_all_images_latent_space, get_train_data,  scale_images, calculate_dino, calculate_TD_DAE, calculate_fdd_dae_Imagenet, calculate_mmd, calculate_TD_DAE_Imagenet, calculate_mmd_imagenet
-
 from disturbance import apply_salt_pepper_noise, apply_gaussian_noise, apply_swirl, apply_swap, apply_swap_GN, apply_mask
-
-
-from modeling_autoencoder_conv import OurConvolutionalAutoencoder
-
-from appro_based import TopologicallyRegularizedAutoencoder
-
-
-
 
 import torch
 import numpy as np
@@ -27,11 +18,9 @@ from skimage.transform import swirl
 import random
 import skimage
 import tensorflow as tf
-
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 import matplotlib.pyplot as plt
-
 from tqdm import tqdm
 import cv2
 
