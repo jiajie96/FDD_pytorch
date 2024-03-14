@@ -119,8 +119,8 @@ def main():
     all_original_images, all_disturbed_images =  create_disturbed_groups(image_paths, group_size)
     
     # 2- Calculate scores
-    # a- FID score
     
+    # a- FID score
     model_c =tf.keras.applications.inception_v3.InceptionV3(weights= '/root/FD_score/inception_v3.h5',include_top=False, pooling='avg',input_shape=(299, 299, 3))
     fid_scores = [] # for all groups
     for i in range(nb_groups) : 
@@ -137,9 +137,79 @@ def main():
         
     np.save(f'/Sensitivity_Test/Experiment/scores/fid.npy', fid_scores)
      
-    # TDD on Imagenet
+    # b - FDD score
+    checkpoint_path = 'Checkpoints/checkpoint_epoch_76.pth'
+    config= ImagenetAutoEncoderConfig()
+    config.input_dim = 299
+    config.input_channel = 3
+    model = ImagenetAutoEncoder(config)
+    checkpoint = torch.load(checkpoint_path)
+    model.load_state_dict(checkpoint['state_dict'])
+    model.eval()
+
+    # Device configuration
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    model.to(device)
+
+    fdd_scores = [] # for all groups
+    for i in range(nb_groups) : 
+        original_group = all_original_images[i]
+        all_disturbtions_in_group = all_disturbed_images[i]
+        all_fdds_4_disturbance =[]
+        for f in range(6): # f :0 ,1,2,3 each for one disturbtion function
+            one_disturbed_group = all_disturbtions_in_group[f]  # (3,group size, 256, 256) ; 1 == level of noise            
+            one_disturbed_group_per_level = one_disturbed_group[0] 
+            score_fdd = calculate_fdd_dae_Imagenet(original_group, one_disturbed_group_per_level, model)
+            all_fdds_4_disturbance.append(score_fdd)
+ 
+        fdd_scores.append(all_fdds_4_disturbance)
+          
+   
+    np.save(f'Sensitivity_Test/Final_Experiment/scores/FDD.npy',fdd_scores)
+
+    # c - TD score
+    model_c =tf.keras.applications.inception_v3.InceptionV3(weights= '/root/FD_score/inception_v3.h5',include_top=False, pooling='avg',input_shape=(299, 299, 3))
+    
+    td_scores = [] # for all groups
+    for i in range(nb_groups) : 
+        original_group = all_original_images[i]
+        all_disturbtions_in_group = all_disturbed_images[i]
+        all_tds_4_disturbance =[]
+        for f in range(6): # f :0 ,1,2,3 each for one disturbtion function : SP, GN, Swirl, Swap
+            one_disturbed_group = all_disturbtions_in_group[f]  # (1, group size, 256, 256) ;  1 == level of noise
+            one_disturbed_group_per_level = one_disturbed_group[0] 
+            score_td = calculate_td(original_group, one_disturbed_group_per_level, model_c)
+            print(score_td)
+            all_tds_4_disturbance.append(score_td)
+         
+        td_scores.append(all_tds_4_disturbance)
+        
+    np.save(f'Sensitivity_Test/Final_Experiment_FFHQ/scores/TD.npy,td_scores)
+    
+    
+    # d- Dino score
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    
+    model_dino = load_encoder('dinov2', device, ckpt=None, arch=None, clean_resize=True)
+    
+    dino_scores = [] # for all groups
+    for i in range(nb_groups) : 
+        original_group = all_original_images[i]
+        all_disturbtions_in_group = all_disturbed_images[i]
+        all_dino_Scores_4_disturbance =[]
+        for f in range(6): # f :0 ,1,2,3 each for one disturbtion function : SP, GN, Swirl, Swap
+            one_disturbed_group = all_disturbtions_in_group[f]  # (1, group size, 256, 256) ;  1 == level of noise
+            one_disturbed_group_per_level = one_disturbed_group[0] 
+            score_dino = calculate_dino(original_group, one_disturbed_group_per_level, model_dino)
+            print(score_dino)
+            all_dino_Scores_4_disturbance.append(score_dino)
+         
+        dino_scores.append(all_dino_Scores_4_disturbance)
+        
+    np.save(f'Sensitivity_Test/Final_Experiment_FFHQ/scores/DinoFD.npy',dino_scores)
     
     '''
+    # TDD on Imagenet
     checkpoint_path = 'Checkpoints/checkpoint_epoch_76.pth'
 
     config= ImagenetAutoEncoderConfig()
@@ -169,119 +239,7 @@ def main():
    
     np.save(f'Sensitivity_Test/Final_Experiment_FFHQ/scores/TD_DAE_Imagenet_scores.npy',scores)
     
-    '''
-    
-    
-    # b - FDD score
-    checkpoint_path = 'Checkpoints/checkpoint_epoch_76.pth'
-
-    config= ImagenetAutoEncoderConfig()
-    config.input_dim = 299
-    config.input_channel = 3
-    model = ImagenetAutoEncoder(config)
-    checkpoint = torch.load(checkpoint_path)
-    model.load_state_dict(checkpoint['state_dict'])
-    model.eval()
-
-    # Device configuration
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model.to(device)
-
-    fdd_scores = [] # for all groups
-    for i in range(nb_groups) : 
-        original_group = all_original_images[i]
-        all_disturbtions_in_group = all_disturbed_images[i]
-        all_fdds_4_disturbance =[]
-        for f in range(6): # f :0 ,1,2,3 each for one disturbtion function
-            one_disturbed_group = all_disturbtions_in_group[f]  # (3,group size, 256, 256) ; 1 == level of noise            
-            one_disturbed_group_per_level = one_disturbed_group[0] 
-            score_fdd = calculate_fdd_dae_Imagenet(original_group, one_disturbed_group_per_level, model)
-            all_fdds_4_disturbance.append(score_fdd)
- 
-        fdd_scores.append(all_fdds_4_disturbance)
-          
-   
-    np.save(f'Sensitivity_Test/Final_Experiment/scores/FDD.npy',fdd_scores)
-    
-    
-    '''
-    
-    # td fdd score
-    
-    
-    config= AutoEncoderConfig()
-    config.input_dim = 256
-    model = AutoEncoder(config)
-    
-    model.load_state_dict(torch.load('/root/Denoising_AE/clean_code_DAE/Biked_Denoising/weights/DAE_model_lr1e4_500epochs.pth'))
-   
-    model.eval()
-
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model.to(device)
-
-
-    fdd_scores = [] # for all groups
-    for i in range(nb_groups) : 
-        original_group = all_original_images[i]
-        all_disturbtions_in_group = all_disturbed_images[i]
-        all_fdds_4_disturbance =[]
-        for f in range(6): # f :0 ,1,2,3 each for one disturbtion function
-            one_disturbed_group = all_disturbtions_in_group[f]  # (3,group size, 256, 256) ; 1 == level of noise            
-            one_disturbed_group_per_level = one_disturbed_group[0] 
-            score_fdd = calculate_TD_DAE(original_group, one_disturbed_group_per_level, model)
-            all_fdds_4_disturbance.append(score_fdd)
- 
-        fdd_scores.append(all_fdds_4_disturbance)
-          
-   
-    np.save(f'/root/Denoising_AE/Sensitivity_Test/Final_Experiment/scores/TD_DAE_scores.npy',fdd_scores)
-    
-    '''
-    # d - TD score
-    model_c =tf.keras.applications.inception_v3.InceptionV3(weights= '/root/FD_score/inception_v3.h5',include_top=False, pooling='avg',input_shape=(299, 299, 3))
-    
-    td_scores = [] # for all groups
-    for i in range(nb_groups) : 
-        original_group = all_original_images[i]
-        all_disturbtions_in_group = all_disturbed_images[i]
-        all_tds_4_disturbance =[]
-        for f in range(6): # f :0 ,1,2,3 each for one disturbtion function : SP, GN, Swirl, Swap
-            one_disturbed_group = all_disturbtions_in_group[f]  # (1, group size, 256, 256) ;  1 == level of noise
-            one_disturbed_group_per_level = one_disturbed_group[0] 
-            score_td = calculate_td(original_group, one_disturbed_group_per_level, model_c)
-            print(score_td)
-            all_tds_4_disturbance.append(score_td)
-         
-        td_scores.append(all_tds_4_disturbance)
-        
-    np.save(f'Sensitivity_Test/Final_Experiment_FFHQ/scores/TD.npy,td_scores)
-    
-    
-    # c- Dino score
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    
-    model_dino = load_encoder('dinov2', device, ckpt=None, arch=None, clean_resize=True)
-    
-    dino_scores = [] # for all groups
-    for i in range(nb_groups) : 
-        original_group = all_original_images[i]
-        all_disturbtions_in_group = all_disturbed_images[i]
-        all_dino_Scores_4_disturbance =[]
-        for f in range(6): # f :0 ,1,2,3 each for one disturbtion function : SP, GN, Swirl, Swap
-            one_disturbed_group = all_disturbtions_in_group[f]  # (1, group size, 256, 256) ;  1 == level of noise
-            one_disturbed_group_per_level = one_disturbed_group[0] 
-            score_dino = calculate_dino(original_group, one_disturbed_group_per_level, model_dino)
-            print(score_dino)
-            all_dino_Scores_4_disturbance.append(score_dino)
-         
-        dino_scores.append(all_dino_Scores_4_disturbance)
-        
-    np.save(f'Sensitivity_Test/Final_Experiment_FFHQ/scores/DinoFD.npy',dino_scores)
-    
-    '''
-    # MMD on DAE Imagenet
-    
+    # MMD on DAE Imagenet 
     checkpoint_path = ''
 
     config= ImagenetAutoEncoderConfig()
@@ -291,8 +249,6 @@ def main():
     checkpoint = torch.load(checkpoint_path)
     model.load_state_dict(checkpoint['state_dict'])
     model.eval()
-
-
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model.to(device)
 
