@@ -165,7 +165,7 @@ def main():
         fdd_scores.append(all_fdds_4_disturbance)
           
    
-    np.save(f'Sensitivity_Test/Final_Experiment/scores/FDD.npy',fdd_scores)
+    np.save(f'Sensitivity_Test/Experiment/scores/FDD.npy',fdd_scores)
 
     # c - TD score
     model_c =tf.keras.applications.inception_v3.InceptionV3(weights= '/root/FD_score/inception_v3.h5',include_top=False, pooling='avg',input_shape=(299, 299, 3))
@@ -184,7 +184,7 @@ def main():
          
         td_scores.append(all_tds_4_disturbance)
         
-    np.save(f'Sensitivity_Test/Final_Experiment_FFHQ/scores/TD.npy,td_scores)
+    np.save(f'Sensitivity_Test/Experiment/scores/TD.npy,td_scores)
     
     
     # d- Dino score
@@ -206,7 +206,7 @@ def main():
          
         dino_scores.append(all_dino_Scores_4_disturbance)
         
-    np.save(f'Sensitivity_Test/Final_Experiment_FFHQ/scores/DinoFD.npy',dino_scores)
+    np.save(f'Sensitivity_Test/Experiment/scores/DinoFD.npy',dino_scores)
     
     '''
     # TDD on Imagenet
@@ -237,7 +237,7 @@ def main():
         scores.append(all_scores_4_disturbance)
           
    
-    np.save(f'Sensitivity_Test/Final_Experiment_FFHQ/scores/TD_DAE_Imagenet_scores.npy',scores)
+    np.save(f'Sensitivity_Test/Experiment/scores/TD_DAE_Imagenet_scores.npy',scores)
     
     # MMD on DAE Imagenet 
     checkpoint_path = ''
@@ -253,21 +253,20 @@ def main():
     model.to(device)
 
 
-    fdd_scores = [] # for all groups
+    scores = [] # for all groups
     for i in range(nb_groups) : 
         original_group = all_original_images[i]
         all_disturbtions_in_group = all_disturbed_images[i]
-        all_fdds_4_disturbance =[]
+        all_4_disturbance =[]
         for f in range(6): # f :0 ,1,2,3 each for one disturbtion function
             one_disturbed_group = all_disturbtions_in_group[f]  # (3,group size, 256, 256) ; 1 == level of noise            
             one_disturbed_group_per_level = one_disturbed_group[0] 
-            score_fdd = calculate_mmd_imagenet(original_group, one_disturbed_group_per_level, model)
-            all_fdds_4_disturbance.append(score_fdd)
+            score = calculate_mmd_imagenet(original_group, one_disturbed_group_per_level, model)
+            all_4_disturbance.append(score)
  
-        fdd_scores.append(all_fdds_4_disturbance)
-          
+        scores.append(all_4_disturbance)
    
-    np.save(f'/root/Denoising_AE/Sensitivity_Test/Final_Experiment/scores/mdd_scores_DAE_Imagenet.npy',fdd_scores)
+    np.save(f'Sensitivity_Test/Experiment/scores/mdd_scores_DAE_Imagenet.npy',scores)
     '''
     
     
