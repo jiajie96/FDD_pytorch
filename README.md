@@ -1,7 +1,7 @@
 # FDD_pytorch
 Official Implementation of our Paper "Enhancing Plausibility Evaluation for Generated Designs with Denoising Autoencoder".
 ## :file_folder: Dataset
-Make sure to import and save the dataset under the folder `Datasets/`
+Make sure to import and save the dataset under the folder `Data/`
 - The BIKED dataset is accessible via : https://decode.mit.edu/projects/biked/ 
 - The ImageNet dataset is accessible via : https://www.image-net.org/download.php 
 - The FFHQ dataset can be obtained from: https://github.com/NVlabs/ffhq-dataset 
