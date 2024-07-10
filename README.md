@@ -1,5 +1,5 @@
 # FDD_pytorch
-Implementation of the Denoising Autoencoder (DAE) in Pytorch.
+Official Implementation of our Paper "Enhancing Plausibility Evaluation for Generated Designs with Denoising Autoencoder".
 ## :file_folder: Dataset
 - The BIKED dataset is accessible via : https://decode.mit.edu/projects/biked/ . 
 - The ImageNet dataset is accessible via : https://www.image-net.org/download.php .
