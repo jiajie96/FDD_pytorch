@@ -3,11 +3,7 @@
 # FDD_pytorch
 Official Implementation of our Paper "Enhancing Plausibility Evaluation for Generated Designs with Denoising Autoencoder".
 
-![diagram](https://github.com/user-attachments/assets/2ef88ccc-6ee5-4a90-9770-55eb450a1a2d)
-
-
-## 🥇 Comparasion
-![FDD](https://github.com/user-attachments/assets/9cd27c50-9adb-4b26-8087-90c0f3997e4d)
+![diagram](https://github.com/jiajie96/FDD_pytorch/blob/main/Data/diagram.png)
 
 ## :file_folder: Dataset
 Make sure to import and save the dataset under the folder `Data/`
