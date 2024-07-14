@@ -6,7 +6,7 @@ Official Implementation of our Paper "Enhancing Plausibility Evaluation for Gene
 ![diagram](https://github.com/user-attachments/assets/2ef88ccc-6ee5-4a90-9770-55eb450a1a2d)
 
 
-## :Sparkles: Comparasion
+## 🥇 Comparasion
 ![FDD](https://github.com/user-attachments/assets/9cd27c50-9adb-4b26-8087-90c0f3997e4d)
 
 ## :file_folder: Dataset
