@@ -1,8 +1,14 @@
 
-[diagram.pdf](https://github.com/user-attachments/files/16216611/diagram.pdf)
 
 # FDD_pytorch
 Official Implementation of our Paper "Enhancing Plausibility Evaluation for Generated Designs with Denoising Autoencoder".
+
+![diagram](https://github.com/user-attachments/assets/2ef88ccc-6ee5-4a90-9770-55eb450a1a2d)
+
+
+## :Sparkles: Comparasion
+![FDD](https://github.com/user-attachments/assets/9cd27c50-9adb-4b26-8087-90c0f3997e4d)
+
 ## :file_folder: Dataset
 Make sure to import and save the dataset under the folder `Data/`
 - The BIKED dataset is accessible via : https://decode.mit.edu/projects/biked/ 
@@ -23,7 +29,7 @@ test ..
 ``` 
 ## :test_tube: Sensitivity Test
 We provide the implementation of the levels of various disturbances, together with the distance metrics FID, FDD, TD and FD_Dino
-
+  
 ## :link: Cite The Paper
 If you find our work or code helpful, or your research benefits from this repo, please cite our paper:
 ```
