@@ -1,3 +1,6 @@
+
+[diagram.pdf](https://github.com/user-attachments/files/16216611/diagram.pdf)
+
 # FDD_pytorch
 Official Implementation of our Paper "Enhancing Plausibility Evaluation for Generated Designs with Denoising Autoencoder".
 ## :file_folder: Dataset
