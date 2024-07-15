@@ -5,7 +5,7 @@ Official Implementation of our Paper "Enhancing Plausibility Evaluation for Gene
 
 ![diagram](https://github.com/jiajie96/FDD_pytorch/blob/main/Data/diagram.png)
 
-To calculate the FDD score between two sets of images:
+:technologist: To calculate the FDD score between two sets of images:
 ```
 from DAE.fdd_tool import calculate_fdd
 
@@ -22,17 +22,7 @@ Make sure to import and save the dataset under the folder `Data/`
 - The FFHQ dataset can be obtained from: https://github.com/NVlabs/ffhq-dataset 
 - Seeing3DChairs (check again with Jiajie)
 
-## :technologist: Denoising Autoencoder DAE
-To train a new DAE model from scratch, simply run 
-```
-train .. 
-``` 
-We also provide the weights of our trained model in `Weights/`
 
-To run inference on the validation or test set, run 
-```
-test .. 
-``` 
 ## :test_tube: Sensitivity Test
 [See the main paper](https://arxiv.org/abs/2403.05352)
 We provide the implementation of the levels of various disturbances, together with the distance metrics FID, FDD, TD and FD_Dino
