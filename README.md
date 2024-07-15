@@ -5,6 +5,16 @@ Official Implementation of our Paper "Enhancing Plausibility Evaluation for Gene
 
 ![diagram](https://github.com/jiajie96/FDD_pytorch/blob/main/Data/diagram.png)
 
+To calculate the FDD score between two sets of images:
+```
+from DAE.fdd_tool import calculate_fdd
+
+# set_1_images and set_2_images contain respectively original data and generated data (shape of (N, H, W, C)).
+
+fdd_score = calculate_fdd(set_1_images, set_2_images)
+print('the Frechet denoised distance is:', fdd_score)
+``` 
+
 ## :file_folder: Dataset
 Make sure to import and save the dataset under the folder `Data/`
 - The BIKED dataset is accessible via : https://decode.mit.edu/projects/biked/ 
