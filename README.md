@@ -24,7 +24,7 @@ To run inference on the validation or test set, run
 test .. 
 ``` 
 ## :test_tube: Sensitivity Test
-![See the main paper](https://arxiv.org/abs/2403.05352)
+[See the main paper](https://arxiv.org/abs/2403.05352)
 We provide the implementation of the levels of various disturbances, together with the distance metrics FID, FDD, TD and FD_Dino
   
 ## :link: Cite The Paper
