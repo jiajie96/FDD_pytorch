@@ -103,7 +103,7 @@ def extract_activations(loader, model, device):
 
 
 def calculate_fdd(images1, images2, _with_color=False, image_shape = 299):
-    with open("/root/FDD/Final_Github_FDD_Code/goodluck.txt") as f:
+    with open("goodluck.txt") as f:
         for line in f:
             print(line, end="")
 
@@ -111,7 +111,7 @@ def calculate_fdd(images1, images2, _with_color=False, image_shape = 299):
     
     # Load the model    
     config = AutoEncoderConfig()
-    model = AutoEncoder(config, ckpt="/root/FDD/checkpoint_epoch_76.pth")
+    model = AutoEncoder(config, ckpt="/FDD_pytorch/Checkpoints/checkpoint_epoch_76.pth")
     model.eval()
     print(" The pretrained DAE is uploaded")
     
