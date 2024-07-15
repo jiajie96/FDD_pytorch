@@ -1,11 +1,16 @@
 
 from typing import Optional, Sequence
+import torch
 from dataclasses import dataclass
 from torch import nn, Tensor
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+
+##########################################################################################
+################################# Configuration ##########################################
+##########################################################################################
 
 class AutoEncoderConfig():
    
@@ -14,7 +19,7 @@ class AutoEncoderConfig():
     def __init__(
         self, 
         input_dim: int = 299, 
-        input_channel : int =1,
+        input_channel : int =3,
         latent_dim: int = 2048, 
         dropout_rate: float = 0.1, 
         num_layers: int = 5, 
@@ -38,7 +43,7 @@ class AutoEncoderConfig():
         self.output_height, self.output_width = self.calculate_output_dimensions(
             input_dim, len(conv_layers), kernel_size, stride, padding
         )
-        print(self.output_height, self.output_width )
+        #print(self.output_height, self.output_width )
         
     @staticmethod
     def calculate_output_dimensions(input_dim, num_layers, kernel_size, stride, padding):
@@ -48,10 +53,15 @@ class AutoEncoderConfig():
             output_height = (output_height + 2 * padding - (kernel_size - 1) - 1) // stride + 1
             output_width = (output_width + 2 * padding - (kernel_size - 1) - 1) // stride + 1
         return output_height, output_width
+
+
+##########################################################################################
+##################################### Model ##############################################
+##########################################################################################
     
 class AutoEncoder(nn.Module):
-    
-    def __init__(self, config: AutoEncoderConfig):
+            
+    def __init__(self, config: AutoEncoderConfig, ckpt: Optional[str] = None):
         super(AutoEncoder, self).__init__()
         self.config = config
         
@@ -63,6 +73,7 @@ class AutoEncoder(nn.Module):
             layers.append(nn.ReLU())
             in_channels = out_channels
         
+        #layers.append(AttnBlock(out_channels))  # uncomment 
         self.encoder = nn.Sequential(*layers) 
         
         self.flattened_size = config.output_height * config.output_width * config.conv_layers[-1]  # 512*8*8 in this case
@@ -72,6 +83,8 @@ class AutoEncoder(nn.Module):
             nn.ReLU()   
         )
         
+        
+        # ------ End of Encoder ------
 
         #-------  Decoder  -------
        
@@ -108,10 +121,13 @@ class AutoEncoder(nn.Module):
             padding=config.padding,
             output_padding= 0
         ))
-        decoder_layers.append(nn.Tanh()) 
+        decoder_layers.append(nn.Tanh())  #  output values are between 0 and 1
         self.decoder = nn.Sequential(*decoder_layers) 
          
-        
+        if ckpt is not None:
+            self.load_state_dict(torch.load(ckpt)['state_dict'])
+            self.eval()
+            
             
     def encode(self, inputs_ids) ->Tensor:
         latent= self.encoder(inputs_ids)
@@ -125,12 +141,13 @@ class AutoEncoder(nn.Module):
         labels = labels if labels != None else input_ids
         
         # Encoding
+        #print('what is feeded to the encoder is of shape', input_ids.shape)
         encoded = self.encoder(input_ids)
-        encoded = encoded.reshape(encoded.size(0), -1)  
-        encoded = self.fc_enc(encoded)  
+        encoded = encoded.reshape(encoded.size(0), -1)  # Flatten the output of the last conv layer
+        encoded = self.fc_enc(encoded)  # Map to latent space
         
         # Decoding
-        decoded = self.fc_dec(encoded)
+        decoded = self.fc_dec(encoded)  # Map from latent space
         decoded = decoded.view(decoded.size(0), self.config.conv_layers[-1], self.config.output_height, self.config.output_width)  
         output_ids = self.decoder(decoded)
     
