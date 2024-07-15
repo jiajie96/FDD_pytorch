@@ -1,7 +1,7 @@
 
 
 # FDD_pytorch
-Official Implementation of our Paper "Enhancing Plausibility Evaluation for Generated Designs with Denoising Autoencoder".
+Official Implementation of our Paper "[Enhancing Plausibility Evaluation for Generated Designs with Denoising Autoencoder](https://arxiv.org/abs/2403.05352)".
 
 ![diagram](https://github.com/jiajie96/FDD_pytorch/blob/main/Data/diagram.png)
 
