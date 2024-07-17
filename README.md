@@ -20,7 +20,7 @@ Make sure to import and save the dataset under the folder `Data/`
 - The BIKED dataset is accessible via : https://decode.mit.edu/projects/biked/ 
 - The ImageNet dataset is accessible via : https://www.image-net.org/download.php 
 - The FFHQ dataset can be obtained from: https://github.com/NVlabs/ffhq-dataset 
-- Seeing3DChairs (check again with Jiajie)
+- Seeing3DChairs
 
 
 ## :test_tube: Sensitivity Test
