@@ -20,7 +20,7 @@ import torch
 import cv2
 from tqdm import tqdm
 
-from Final_Github_FDD_Code.model import AutoEncoder, AutoEncoderConfig
+from DAE.model import AutoEncoder, AutoEncoderConfig
 from torch.utils.data import DataLoader, Dataset
 
 from torchvision import datasets, transforms
@@ -103,7 +103,7 @@ def extract_activations(loader, model, device):
 
 
 def calculate_fdd(images1, images2, _with_color=False, image_shape = 299):
-    with open("/root/FDD/Final_Github_FDD_Code/goodluck.txt") as f:
+    with open("start.txt") as f:
         for line in f:
             print(line, end="")
 
