@@ -7,7 +7,7 @@ Official Implementation of our Paper "[Enhancing Plausibility Evaluation for Gen
 
 :technologist: To calculate the FDD score between two sets of images:
 ```
-from DAE.fdd_tool import calculate_fdd
+from fdd_tool import calculate_fdd
 
 # set_1_images and set_2_images contain respectively original data and generated data (shape of (N, H, W, C)).
 
