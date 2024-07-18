@@ -19,6 +19,8 @@ from scipy.stats import wasserstein_distance
 import torch
 import cv2
 from tqdm import tqdm
+import gdown
+import io
 
 from DAE.model import AutoEncoder, AutoEncoderConfig
 from torch.utils.data import DataLoader, Dataset
@@ -26,6 +28,8 @@ from torch.utils.data import DataLoader, Dataset
 from torchvision import datasets, transforms
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+file_id ="1j7MVFWYfRNZLQ3uChe7TGQG8L1Oaf9Gt" # ID of Chekpoint path saved in a google drive file
+
 
 # scale an array of images to a new size
 def scale_images(images, new_shape):
@@ -109,9 +113,13 @@ def calculate_fdd(images1, images2, _with_color=False, image_shape = 299):
 
     
     
-    # Load the model    
+    # Load the model 
+    file_bytes = io.BytesIO()
+    gdown.download(id=file_id, output=file_bytes, quiet=False)
+    file_bytes.seek(0)
+    
     config = AutoEncoderConfig()
-    model = AutoEncoder(config, ckpt="/root/FDD/checkpoint_epoch_76.pth")
+    model = AutoEncoder(config, ckpt=file_bytes)
     model.eval()
     print(" The pretrained DAE is uploaded")
     
